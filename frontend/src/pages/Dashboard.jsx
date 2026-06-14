@@ -36,7 +36,7 @@ function generateCalendar() {
   return calendar;
 }
 
-// 
+// “Dashboard component for managing habits, tracking progress/streaks, and rendering the calendar view.”
 function Dashboard() {
 
   // states for habits and new habit input
@@ -60,10 +60,12 @@ function Dashboard() {
     if (!title.trim()) return;
 
     try {
-      const res = await API.post("/habits", { title });
-
+      await API.post("/habits", { title });
       setTitle("");
+
       fetchHabits();
+      fetchMonthly();
+      fetchAnalytics();
 
     } catch (err) {
 
