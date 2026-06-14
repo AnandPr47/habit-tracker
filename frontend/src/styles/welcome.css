@@ -1,0 +1,86 @@
+.welcome-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.welcome-card {
+  padding: 60px 50px;
+  border-radius: 28px;
+  text-align: center;
+  width: 440px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  transition: 0.4s ease;
+}
+
+.welcome-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+}
+
+.brand {
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #6366f1, #06b6d4);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 18px;
+}
+
+.tagline {
+  font-size: 16px;
+  color: #475569;
+  margin-bottom: 40px;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Material 3 Primary Button */
+.primary-btn {
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #6366f1;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.primary-btn:hover {
+  background: #4f46e5;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+  transform: scale(1.05);
+}
+
+/* Outlined Button */
+.secondary-btn {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background: rgba(99, 102, 241, 0.08);
+  transform: scale(1.03);
+}
