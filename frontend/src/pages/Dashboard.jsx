@@ -127,6 +127,22 @@ function Dashboard() {
   const toggleHabit = async (habitId, day) => {
 
     const today = new Date();
+
+    // clicked date
+    const clickedDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      day
+    );
+
+    // remove time
+    today.setHours(0, 0, 0, 0);
+
+    // stop future dates
+    if (clickedDate > today) {
+      return;
+    }
+
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
 
@@ -260,6 +276,8 @@ function Dashboard() {
 
     return streak;
   };
+
+
 
 
   // ----------------------------------------------------------------------------------------------------------------------------
@@ -400,6 +418,12 @@ function Dashboard() {
 
                       {week.map((day, i) => {
 
+                        const today = new Date();
+                        const currentDay = today.getDate();
+
+                        const isToday = day === currentDay;
+                        const isFuture = day > currentDay;
+
                         if (!day) return <div key={i} className="empty"></div>
 
                         const done = habit?.dailyStatus?.[day]
@@ -407,8 +431,12 @@ function Dashboard() {
                         return (
                           <div
                             key={day}
-                            className={`box week-${wIndex} ${done ? "done" : ""}`}
-                            onClick={() => toggleHabit(habit.habitId, day)}
+                            className={`box week-${wIndex}
+                              ${done ? "done" : ""}
+                              ${isToday ? "today-box" : ""}
+                              ${isFuture ? "future-box" : ""}
+                            `}
+                            onClick={() => !isFuture && toggleHabit(habit.habitId, day)}
                           />
                         )
 
