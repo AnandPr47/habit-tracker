@@ -345,12 +345,30 @@ function Dashboard() {
 
           <button
             onClick={() => {
+
+              if (!user) return;
+
+              const joinedDate = new Date(user.createdAt);
+
+              const joinedMonth =
+                joinedDate.getMonth() + 1;
+
+              const joinedYear =
+                joinedDate.getFullYear();
+
+              const isJoinedMonth =
+                selectedMonth === joinedMonth &&
+                selectedYear === joinedYear;
+
+              if (isJoinedMonth) return;
+
               if (selectedMonth === 1) {
                 setSelectedMonth(12);
                 setSelectedYear(prev => prev - 1);
               } else {
                 setSelectedMonth(prev => prev - 1);
               }
+
             }}
           >
             ←
