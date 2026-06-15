@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 
 
-function generateCalendar() {
+function generateCalendar(month, year) {
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+  const firstDay = new Date(year, month - 1, 1).getDay();
 
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInMonth = new Date(
+    year,
+    month,
+    0
+  ).getDate();
 
   const calendar = [];
   let week = new Array(7).fill(null);
@@ -26,7 +27,6 @@ function generateCalendar() {
       week = new Array(7).fill(null);
       dayIndex = 0;
     }
-
   }
 
   if (week.some(d => d !== null)) {
@@ -167,20 +167,29 @@ function Dashboard() {
   //------------------------------------------------------------------------------------------------------------------------------------------//
   const [monthData, setMonthData] = useState(null);
 
+  const today = new Date();
+
+  const [selectedMonth, setSelectedMonth] = useState(
+    today.getMonth() + 1
+  );
+
+  const [selectedYear, setSelectedYear] = useState(
+    today.getFullYear()
+  );
+
   useEffect(() => {
 
-    fetchMonthly()
-    fetchHabits()
-    fetchAnalytics()
+    fetchMonthly();
+    fetchHabits();
+    fetchAnalytics();
 
-  }, [])
+  }, [selectedMonth, selectedYear])
 
   // fetch monthly habit data for calendar view
   const fetchMonthly = async () => {
     try {
-      const today = new Date();
-      const month = today.getMonth() + 1;
-      const year = today.getFullYear();
+      const month = selectedMonth;
+      const year = selectedYear;
 
       const res = await API.get(
         `/habits/summary/month-details?month=${month}&year=${year}`
@@ -198,10 +207,8 @@ function Dashboard() {
 
     try {
 
-      const today = new Date();
-
-      const month = today.getMonth() + 1;
-      const year = today.getFullYear();
+      const month = selectedMonth;
+      const year = selectedYear;
 
       const res = await API.get(
         `/habits/summary/month-details?month=${month}&year=${year}`
@@ -217,7 +224,10 @@ function Dashboard() {
 
 
   // generate calendar for current month
-  const calendar = generateCalendar();
+  const calendar = generateCalendar(
+    selectedMonth,
+    selectedYear
+  );
   const weeks = calendar;
   // This function takes the dailyStatus object, which contains the completion status of habits for each day of the month, and organizes it into weeks. It creates an array of weeks, where each week is an array of days. The function iterates through the days in the dailyStatus object and groups them into weeks based on their position in the month.
   const getWeeks = (dailyStatus) => {
@@ -298,6 +308,54 @@ function Dashboard() {
         <h1 className="dashboard-title">
           Your Habits
         </h1>
+
+        <div className="month-switcher">
+
+          <button
+            onClick={() => {
+              if (selectedMonth === 1) {
+                setSelectedMonth(12);
+                setSelectedYear(prev => prev - 1);
+              } else {
+                setSelectedMonth(prev => prev - 1);
+              }
+            }}
+          >
+            ←
+          </button>
+
+          <h2>
+            {new Date(
+              selectedYear,
+              selectedMonth - 1
+            ).toLocaleString("default", {
+              month: "long",
+              year: "numeric"
+            })}
+          </h2>
+
+          <button
+            onClick={() => {
+              const current = new Date();
+
+              const isCurrentMonth =
+                selectedMonth === current.getMonth() + 1 &&
+                selectedYear === current.getFullYear();
+
+              if (isCurrentMonth) return;
+
+              if (selectedMonth === 12) {
+                setSelectedMonth(1);
+                setSelectedYear(prev => prev + 1);
+              } else {
+                setSelectedMonth(prev => prev + 1);
+              }
+            }}
+          >
+            →
+          </button>
+
+        </div>
 
         <div className="add-section">
           <input
@@ -419,10 +477,19 @@ function Dashboard() {
                       {week.map((day, i) => {
 
                         const today = new Date();
-                        const currentDay = today.getDate();
 
-                        const isToday = day === currentDay;
-                        const isFuture = day > currentDay;
+                        const clickedDate = new Date(
+                          selectedYear,
+                          selectedMonth - 1,
+                          day
+                        );
+
+                        const isToday =
+                          day === today.getDate() &&
+                          selectedMonth === today.getMonth() + 1 &&
+                          selectedYear === today.getFullYear();
+
+                        const isFuture = clickedDate > today;
 
                         if (!day) return <div key={i} className="empty"></div>
 
