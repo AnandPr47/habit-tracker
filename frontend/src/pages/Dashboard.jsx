@@ -43,6 +43,8 @@ function Dashboard() {
   const [habits, setHabits] = useState([]);
   const [title, setTitle] = useState("");
 
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     fetchHabits();
   }, []);
@@ -182,6 +184,7 @@ function Dashboard() {
     fetchMonthly();
     fetchHabits();
     fetchAnalytics();
+    fetchUser();
 
   }, [selectedMonth, selectedYear])
 
@@ -215,6 +218,21 @@ function Dashboard() {
       );
 
       setAnalytics(res.data);
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  };
+
+  // fetch user details
+  const fetchUser = async () => {
+
+    try {
+
+      const res = await API.get("/auth/me");
+
+      setUser(res.data);
 
     } catch (err) {
       console.log(err);
@@ -308,6 +326,20 @@ function Dashboard() {
         <h1 className="dashboard-title">
           Your Habits
         </h1>
+
+        {user && (
+          <p className="joined-text">
+            Joined on{" "}
+            {new Date(user.createdAt).toLocaleDateString(
+              "en-IN",
+              {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              }
+            )}
+          </p>
+        )}
 
         <div className="month-switcher">
 
