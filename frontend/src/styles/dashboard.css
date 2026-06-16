@@ -380,6 +380,11 @@
   cursor: not-allowed;
 }
 
+.disabled-box {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
 /* ----------------------------------------- Responsive ------------------------------------------- */
 
 @media (max-width:900px) {

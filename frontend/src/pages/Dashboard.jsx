@@ -541,6 +541,17 @@ function Dashboard() {
 
                         const isFuture = clickedDate > today;
 
+                        const joinedDate = user
+                          ? new Date(user.createdAt)
+                          : null;
+                        if (joinedDate) {
+                          joinedDate.setHours(0, 0, 0, 0);
+                        }
+
+                        const isBeforeJoin =
+                          joinedDate &&
+                          clickedDate < joinedDate;
+
                         if (!day) return <div key={i} className="empty"></div>
 
                         const done = habit?.dailyStatus?.[day]
@@ -552,8 +563,13 @@ function Dashboard() {
                               ${done ? "done" : ""}
                               ${isToday ? "today-box" : ""}
                               ${isFuture ? "future-box" : ""}
+                              ${isBeforeJoin ? "disabled-box" : ""}
                             `}
-                            onClick={() => !isFuture && toggleHabit(habit.habitId, day)}
+                            onClick={() =>
+                              !isFuture &&
+                              !isBeforeJoin &&
+                              toggleHabit(habit.habitId, day)
+                            }
                           />
                         )
 
